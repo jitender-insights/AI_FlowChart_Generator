@@ -1,0 +1,51 @@
+digraph Flowchart {
+    rankdir=LR;
+    graph [bgcolor="#f7f7f7", fontname="Arial", fontsize="12"];
+    node [shape="box", style="filled", fillcolor="#e0e0e0", fontname="Arial", fontsize="10", margin="0.2,0.1", ranksep="1.5", nodesep="0.5", fontcolor="#333333", penwidth="1.5", color="#333333"];
+    edge [fontname="Arial", fontsize="8", fontcolor="#666666", color="#666666"];
+
+    subgraph cluster_input {
+        style="filled";
+        fillcolor="#d9f3ff";
+        label="Input";
+        input_tickets [label="Input Tickets"];
+    }
+
+    subgraph cluster_preprocessing {
+        style="filled";
+        fillcolor="#fff0e0";
+        label="Preprocessing";
+        clean_tickets [label="Clean Tickets"];
+        tokenize_tickets [label="Tokenize Tickets"];
+    }
+
+    subgraph cluster_embedding {
+        style="filled";
+        fillcolor="#e6ffe6";
+        label="Embedding";
+        generate_embeddings [label="Generate Embeddings"];
+    }
+
+    subgraph cluster_similarity {
+        style="filled";
+        fillcolor="#f0e6ff";
+        label="Similarity Search";
+        calculate_similarity [label="Calculate Similarity"];
+        identify_duplicates [label="Identify Duplicates"];
+    }
+
+    subgraph cluster_output {
+        style="filled";
+        fillcolor="#ffe6f0";
+        label="Output";
+        output_duplicates [label="Output Duplicate Tickets"];
+    }
+
+    input_tickets -> clean_tickets [label="Clean"];
+    clean_tickets -> tokenize_tickets [label="Tokenize"];
+    tokenize_tickets -> generate_embeddings [label="Generate"];
+    generate_embeddings -> calculate_similarity [label="Calculate"];
+    calculate_similarity -> identify_duplicates [label="Identify"];
+    identify_duplicates -> output_duplicates [label="Output"];
+}
+node [style=filled, fillcolor=gray20, fontcolor=white]
