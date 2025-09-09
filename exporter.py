@@ -39,3 +39,21 @@ def render_dot(dot_code: str, fmt: str = "png") -> str:
             f.write(png_bytes)
         return png_path
     return graph.render(path, cleanup=True)
+
+def cleanup_old_outputs(hours: int = 1):
+    """Delete files in OUTPUT_DIR older than the given number of hours."""
+    now = os.path.getmtime if os.name == 'nt' else os.path.getctime
+    cutoff = (os.path.getmtime if os.name == 'nt' else os.path.getctime)(__file__)
+    cutoff = cutoff - hours * 3600
+    for filename in os.listdir(OUTPUT_DIR):
+        file_path = os.path.join(OUTPUT_DIR, filename)
+        if os.path.isfile(file_path):
+            file_time = os.path.getmtime(file_path)
+            if file_time < cutoff:
+                try:
+                    os.remove(file_path)
+                except Exception:
+                    pass
+
+# Run cleanup at startup
+cleanup_old_outputs(hours=1)
