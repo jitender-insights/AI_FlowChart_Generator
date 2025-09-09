@@ -14,10 +14,26 @@ You are an expert system that converts natural language descriptions of processe
 
 1. Graph Structure:
    - Use a directed graph (digraph) named Flowchart unless a different name is specified in the description.
-   - Set the rank direction to LR (left-to-right) unless specified otherwise.
-   - Apply consistent styling:
-     - Graph: bgcolor="#f7f7f7", fontname="Arial", fontsize="12".
-     - Nodes: shape="box", style="filled", fillcolor="#e0e0e0", fontname="Arial", fontsize="10", margin="0.2,0.1", ranksep="1.5", nodesep="0.5", fontcolor="#333333", penwidth="1.5", color="#333333".
+   - Rank direction:
+     - Support: TB (top-to-bottom), BT (bottom-to-top), LR (left-to-right), RL (right-to-left).
+     - Default: LR.
+     - Automatically adjust:
+       - If the workflow is long and sequential, prefer TB to avoid excessive horizontal width.
+       - If the workflow is wide with parallel branches, prefer LR.
+       - User-specified direction always takes precedence.
+   - Apply global graph settings to fit the flowchart on a single page:
+     - ranksep="0.5", nodesep="0.3"
+     - size="8,10"
+     - ratio="compress"
+     - splines=true
+     - concentrate=true
+   - Styling:
+     - Graph: bgcolor="#f7f7f7", fontname="Arial".
+     - Fonts and margins must auto-scale with complexity:
+       - Few nodes (<10): fontsize=12 (graph), 11 (nodes), margin="0.25,0.15".
+       - Medium (10–30): fontsize=11 (graph), 10 (nodes), margin="0.2,0.1".
+       - Large (>30): fontsize=10 (graph), 9 (nodes), margin="0.15,0.08".
+     - Nodes: shape="box", style="filled", fillcolor="#e0e0e0", penwidth="1.5", fontcolor="#333333", color="#333333".
      - Edges: fontname="Arial", fontsize="8", fontcolor="#666666", color="#666666".
    - Use cylinder shape for nodes representing final outputs (e.g., exported files like PNG, PDF).
 
@@ -44,8 +60,9 @@ You are an expert system that converts natural language descriptions of processe
 5. Input Interpretation:
    - Carefully analyze the description to identify distinct steps, components, or modules and their relationships.
    - If the description is vague, infer logical modules (e.g., input, processing, output) and group them into subgraphs with appropriate fillcolor values.
-   - If specific styling or structural preferences (e.g., colors, shapes, or rank direction) are mentioned, incorporate them; otherwise, follow the default guidelines.
+   - If specific styling or structural preferences (e.g., colors, shapes, or rank direction) are mentioned, incorporate them; otherwise, follow the default and auto-adjust rules.
    - For complex descriptions, prioritize clarity by creating a simple, logical flowchart.
+   - Always adjust direction, font size, and node margins dynamically to maximize readability and ensure the entire flowchart fits on a single page.
 
 6. Example:
    Input: "A user enters a process description in a web interface. The system uses an LLM to generate DOT code. The DOT code is rendered as a flowchart. The user can export the flowchart as PNG or PDF."
@@ -56,6 +73,7 @@ User Description:
 Output:
 Provide only the valid Graphviz DOT code, enclosed in a code block (```), without additional explanations or comments unless requested.
 """)
+
 
 # Initialize the LLM
 llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash")
