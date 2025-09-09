@@ -22,9 +22,17 @@ if st.button("Generate Flowchart"):
             st.subheader("📊 Flowchart Preview")
             st.graphviz_chart(dot_code)
 
-            # dot_file = save_dot_file(dot_code)
-            png_file = render_dot(dot_code, "png")
-            pdf_file = render_dot(dot_code, "pdf")
+            try:
+                png_file = render_dot(dot_code, "png")
+                pdf_file = render_dot(dot_code, "pdf")
+            except Exception as e:
+                import graphviz.backend
+                if isinstance(e, graphviz.backend.ExecutableNotFound):
+                    st.error("Graphviz executables not found. Please ensure Graphviz is installed and available in the system PATH.")
+                    st.stop()
+                else:
+                    st.error(f"An error occurred: {e}")
+                    st.stop()
 
             st.subheader("⬇️ Downloads")
             # with open(dot_file, "rb") as f:
