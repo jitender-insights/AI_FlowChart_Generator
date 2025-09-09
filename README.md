@@ -16,5 +16,6 @@ This tool converts natural language process descriptions into flowcharts using G
 ![alt text](download.png)
 
 ## Demo Video
+![alt text](demo.gif)
 
 
